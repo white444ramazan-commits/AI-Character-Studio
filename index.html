@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#100b12">
+<title>AI Character Studio</title>
+<link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+<div class="app-shell">
+<header class="topbar"><div class="brand"><span class="brand-mark">✦</span><div><strong>CHARACTER STUDIO</strong><small>3D CREATOR · PREVIEW BUILD</small></div></div><div class="top-actions"><span class="pill" id="stylePill">REALISTIC</span><button class="icon-btn" id="saveBtn" title="Save snapshot">▣</button></div></header>
+<div class="workspace">
+<aside class="sidebar">
+<div class="panel-heading">CHARACTER</div>
+<div class="mode-switch"><button class="active" data-mode="realistic">Realistic</button><button data-mode="anime">Anime</button></div>
+<label class="field-label">Preset</label><select id="preset"><option value="default">Studio model</option><option value="fantasy">Fantasy adventurer</option><option value="cyber">Cyberpunk</option><option value="casual">Casual outfit</option></select>
+<div class="section-title">Appearance</div>
+<label class="slider-row"><span>Body build</span><output id="buildOut">50</output><input id="build" type="range" min="25" max="85" value="50"></label>
+<label class="slider-row"><span>Height</span><output id="heightOut">50</output><input id="height" type="range" min="35" max="75" value="50"></label>
+<label class="slider-row"><span>Hair length</span><output id="hairOut">70</output><input id="hair" type="range" min="0" max="100" value="70"></label>
+<label class="field-label">Skin tone</label><div class="swatches" id="skinSwatches"><button data-color="#f2c6a8" class="selected"></button><button data-color="#d69a75"></button><button data-color="#a96c4d"></button><button data-color="#704832"></button><button data-color="#f0d7c8"></button></div>
+<label class="field-label">Hair color</label><div class="swatches" id="hairSwatches"><button data-color="#23151c" class="selected"></button><button data-color="#8e4d2b"></button><button data-color="#d8bd86"></button><button data-color="#b8c6d7"></button><button data-color="#c84b66"></button></div>
+<div class="section-title">Wardrobe</div><select id="outfit"><option value="black">Black studio outfit</option><option value="white">White outfit</option><option value="red">Crimson outfit</option><option value="fantasy">Fantasy armor</option></select>
+<div class="section-title">Scene</div><select id="background"><option value="studio">Soft studio</option><option value="sunset">Sunset</option><option value="night">Night city</option><option value="forest">Forest</option></select>
+<div class="section-title">Lighting</div><label class="slider-row"><span>Light intensity</span><output id="lightOut">75</output><input id="light" type="range" min="20" max="120" value="75"></label>
+<button class="primary-btn" id="randomBtn">✦ Randomize character</button>
+</aside>
+<main class="viewport-wrap"><div class="viewport" id="viewport"><div class="viewport-label"><span>LIVE 3D VIEW</span><span>DRAG TO ORBIT · PINCH TO ZOOM</span></div><div id="stage"></div><div class="loading" id="loading">Loading 3D studio…</div><div class="view-tools"><button id="resetView">↺ Reset view</button><button id="fullscreen">⛶</button></div></div><div class="bottom-panel"><div><strong id="characterName">Astra · Character 01</strong><small>Preview model · customize using controls</small></div><div class="bottom-actions"><button id="poseBtn">Pose: Neutral</button><button class="primary-btn" id="captureBtn">Capture</button></div></div><section class="gallery"><div class="gallery-head"><strong>Snapshots</strong><span id="galleryCount">0 images</span></div><div class="gallery-grid" id="galleryGrid"><div class="empty-gallery">Snapshots you capture will appear here.</div></div></section></main>
+</div>
+</div>
+<script type="module" src="./app.js"></script>
+</body></html>
