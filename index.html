@@ -26,10 +26,17 @@
     <main class="workspace">
       <aside class="sidebar">
         <div class="sidebar-heading">
-          <div class="eyebrow">ПЕРСОНАЖ</div>
-          <h1>Внешность</h1>
-          <p>Настрой лицо, пропорции и одежду. Модель можно вращать и приближать.</p>
+          <div class="eyebrow">CHARACTER STUDIO</div>
+          <h1>Создай персонажа</h1>
+          <p>Выбери раздел, настрой внешний вид и осмотри модель в 3D.</p>
         </div>
+        <nav class="quick-nav" aria-label="Быстрые разделы">
+          <button type="button" class="quick-nav-btn active" data-scroll="#preset">Образ</button>
+          <button type="button" class="quick-nav-btn" data-scroll="#faceEditor">Лицо</button>
+          <button type="button" class="quick-nav-btn" data-scroll="#bodyEditor">Тело</button>
+          <button type="button" class="quick-nav-btn" data-scroll="#clothingSection">Одежда</button>
+          <button type="button" class="quick-nav-btn" data-scroll="#studioSection">Студия</button>
+        </nav>
 
         <label class="field-label" for="preset">Стартовый образ</label>
         <select id="preset">
@@ -39,7 +46,7 @@
           <option value="elegant">Элегантный</option>
         </select>
 
-        <section class="control-section">
+        <section class="control-section" id="bodyBasicSection">
           <div class="section-title"><span class="section-icon">◉</span> Телосложение</div>
           <label class="slider-row">
             <span>Возраст</span><output id="ageOut">30</output>
@@ -71,7 +78,7 @@
           </label>
         </section>
 
-        <section class="control-section">
+        <section class="control-section" id="skinSection">
           <div class="section-title"><span class="section-icon">◌</span> Кожа и глаза</div>
           <label class="field-label">Тон кожи</label>
           <div class="swatches" id="skinSwatches">
@@ -106,7 +113,7 @@
           <div id="faceAdvancedControls" class="dynamic-control-groups"></div>
         </details>
 
-        <section class="control-section">
+        <section class="control-section" id="hairSection">
           <div class="section-title"><span class="section-icon">⌁</span> Волосы</div>
           <label class="field-label" for="hairStyle">Причёска</label>
           <select id="hairStyle">
@@ -133,8 +140,8 @@
           <p class="inline-note">Здесь доступны морфы шеи, плеч, грудной клетки, формы торса, живота, талии и бёдер. Общий мышечный тонус и телосложение настраиваются выше.</p>
         </details>
 
-        <section class="control-section">
-          <div class="section-title"><span class="section-icon">◇</span> Одежда</div>
+        <section class="control-section" id="clothingSection">
+          <div class="section-title"><span class="section-icon">◇</span> Одежда и аксессуары</div>
           <label class="field-label" for="outfit">Комплект</label>
           <select id="outfit">
             <option value="female_sportsuit01">Спортивный комплект</option>
@@ -162,8 +169,8 @@
           <p class="inline-note">Анатомический предпросмотр использует закрытый непрозрачный базовый спортивный комплект. Он позволяет оценивать силуэт и пропорции без отображения интимных деталей.</p>
         </section>
 
-        <section class="control-section">
-          <div class="section-title"><span class="section-icon">✧</span> Студия</div>
+        <section class="control-section" id="studioSection">
+          <div class="section-title"><span class="section-icon">✧</span> Студия и качество</div>
           <label class="field-label" for="background">Фон</label>
           <select id="background">
             <option value="studio">Студийный</option>
@@ -187,14 +194,14 @@
           <button class="primary-btn" id="randomBtn">✦ Случайный образ</button>
           <button class="secondary-btn" id="resetBtn">Сбросить настройки</button>
         </div>
-        <p class="asset-note">Модель поддерживает десятки настроек лица и тела, варианты кожи, глаз, причёсок и одежды. Для загрузки деталей требуется интернет.</p>
+        <p class="asset-note">Подсказка: вращай модель пальцем, приближай двумя пальцами. Детальные текстуры загружаются через интернет.</p>
       </aside>
 
       <section class="viewport-wrap">
         <div class="viewport" id="viewport">
           <div class="viewport-label">
-            <span><i></i> 3D-ПРЕДПРОСМОТР</span>
-            <span>ВРАЩАЙ · ПРИБЛИЖАЙ · ОСМАТРИВАЙ</span>
+            <span><i></i> ПРЕДПРОСМОТР</span>
+            <span>ПЕРЕТАЩИ — ВРАЩАТЬ · ЩИПКОМ — ПРИБЛИЗИТЬ</span>
           </div>
           <div id="stage"></div>
           <div class="loading" id="loading">
@@ -203,7 +210,7 @@
             <span id="loadingText">Подготавливаем анатомию и текстуры…</span>
           </div>
           <div class="view-tools">
-            <button id="resetView">↺ Сбросить ракурс</button>
+            <button id="resetView">Сбросить ракурс</button>
             <button id="fullscreen" aria-label="Полный экран">⛶</button>
           </div>
           <div class="render-status"><span class="live-dot"></span><span id="renderStatus">ОЖИДАНИЕ МОДЕЛИ</span></div>
@@ -212,7 +219,7 @@
         <div class="bottom-panel">
           <div class="character-meta">
             <strong>Персонаж 01</strong>
-            <small>Полноразмерная 3D-модель · PBR-материалы · скелет</small>
+            <small>Реалистичная 3D-модель · настройка внешности и одежды</small>
           </div>
           <div class="bottom-actions">
             <button class="primary-btn capture-btn" id="captureBtn">Сохранить снимок</button>
