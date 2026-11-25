@@ -38,3 +38,19 @@
  .viewport-wrap{order:0}
  .sidebar{order:1;max-height:none;overflow:visible}
 }
+
+.anatomy-mode-btn.active{
+  border-color:#d45a7c;
+  background:linear-gradient(120deg,#4a2435,#291923);
+  color:#fff;
+  box-shadow:inset 0 0 0 1px #e76a8b40,0 0 18px #b53c6324;
+}
+#restoreWardrobeBtn:disabled{
+  opacity:.38;
+  cursor:not-allowed;
+  box-shadow:none;
+}
+#restoreWardrobeBtn:not(:disabled){
+  border-color:#735061;
+  color:#f1dce6;
+}
