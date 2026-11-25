@@ -110,7 +110,7 @@ const DEFAULT_CONFIG = {
 const PRESETS = {
   reference: {
     hair: 'ponytail01', hairColor: '#38251c',
-    clothes: ['female_sportsuit01', 'shoes02'],
+    clothes: ['female_sportsuit01'],
     weight: 0.52, height: 0.50, muscle: 0.36, age: (30 - 18) / 72
   },
   sport: {
