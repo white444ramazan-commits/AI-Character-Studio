@@ -28,7 +28,7 @@
         <div class="sidebar-heading">
           <div class="eyebrow">ПЕРСОНАЖ</div>
           <h1>Внешность</h1>
-          <p>Настрой модель и рассмотри её со всех сторон</p>
+          <p>Настрой лицо, пропорции и одежду. Модель можно вращать и приближать.</p>
         </div>
 
         <label class="field-label" for="preset">Стартовый образ</label>
@@ -43,11 +43,11 @@
           <div class="section-title"><span class="section-icon">◉</span> Телосложение</div>
           <label class="slider-row">
             <span>Возраст</span><output id="ageOut">30</output>
-            <input id="age" type="range" min="18" max="55" value="30">
+            <input id="age" type="range" min="18" max="90" value="30">
           </label>
           <label class="slider-row">
             <span>Телосложение</span><output id="buildOut">52</output>
-            <input id="build" type="range" min="20" max="80" value="52">
+            <input id="build" type="range" min="10" max="90" value="52">
           </label>
           <label class="slider-row">
             <span>Рост</span><output id="heightOut">50</output>
@@ -56,6 +56,18 @@
           <label class="slider-row">
             <span>Мышечный тонус</span><output id="muscleOut">36</output>
             <input id="muscle" type="range" min="10" max="85" value="36">
+          </label>
+          <label class="slider-row">
+            <span>Размер груди</span><output id="cupOut">48</output>
+            <input id="cupSize" type="range" min="0" max="100" value="48">
+          </label>
+          <label class="slider-row">
+            <span>Объём ягодиц</span><output id="buttOut">0</output>
+            <input id="buttocks" type="range" min="-65" max="65" value="0">
+          </label>
+          <label class="slider-row">
+            <span>Пропорции тела</span><output id="proportionsOut">50</output>
+            <input id="proportions" type="range" min="0" max="100" value="50">
           </label>
         </section>
 
@@ -76,6 +88,23 @@
             <option value="grey">Серые</option>
           </select>
         </section>
+
+        <details class="control-section advanced-section" id="faceEditor">
+          <summary><span class="section-icon">◉</span> Настройка лица</summary>
+          <label class="field-label" for="faceShape">Форма лица</label>
+          <select id="faceShape">
+            <option value="custom">Своя форма</option>
+            <option value="oval">Овальное</option>
+            <option value="round">Круглое</option>
+            <option value="square">Квадратное</option>
+            <option value="heart">Сердцевидное</option>
+            <option value="diamond">Ромбовидное</option>
+            <option value="soft">Мягкие черты</option>
+            <option value="defined">Выраженные скулы</option>
+            <option value="petite">Миниатюрное</option>
+          </select>
+          <div id="faceAdvancedControls" class="dynamic-control-groups"></div>
+        </details>
 
         <section class="control-section">
           <div class="section-title"><span class="section-icon">⌁</span> Волосы</div>
@@ -98,6 +127,11 @@
           </div>
         </section>
 
+        <details class="control-section advanced-section" id="bodyEditor">
+          <summary><span class="section-icon">◈</span> Детальная настройка тела</summary>
+          <div id="bodyAdvancedControls" class="dynamic-control-groups"></div>
+        </details>
+
         <section class="control-section">
           <div class="section-title"><span class="section-icon">◇</span> Одежда</div>
           <label class="field-label" for="outfit">Комплект</label>
@@ -115,6 +149,15 @@
             <option value="shoes04">Ботинки</option>
             <option value="shoes05">Обувь 5</option>
           </select>
+          <label class="field-label" for="headwear">Головной убор</label>
+          <select id="headwear"><option value="">Без головного убора</option></select>
+          <label class="field-label" for="hat">Шляпа / шапка</label>
+          <select id="hat"><option value="">Без шляпы</option></select>
+          <div class="wardrobe-actions">
+            <button class="secondary-btn" id="baseOutfitBtn">Базовый закрытый комплект</button>
+            <button class="secondary-btn" id="removeAccessoriesBtn">Снять аксессуары</button>
+          </div>
+          <p class="inline-note">Доступны закрытые комплекты, платья, обувь и головные уборы. Режим полной наготы не предусмотрен.</p>
         </section>
 
         <section class="control-section">
@@ -142,7 +185,7 @@
           <button class="primary-btn" id="randomBtn">✦ Случайный образ</button>
           <button class="secondary-btn" id="resetBtn">Сбросить настройки</button>
         </div>
-        <p class="asset-note">Реалистичная анатомическая 3D-модель, текстуры кожи, волосы и материалы одежды. Для загрузки деталей модели нужен интернет.</p>
+        <p class="asset-note">Модель поддерживает десятки настроек лица и тела, варианты кожи, глаз, причёсок и одежды. Для загрузки деталей требуется интернет.</p>
       </aside>
 
       <section class="viewport-wrap">
@@ -181,6 +224,7 @@
       </section>
     </main>
   </div>
+  <script type="module" src="/customizer.js"></script>
   <script type="module" src="/app.js"></script>
 </body>
 </html>
