@@ -19,6 +19,7 @@ const LABELS = {
   african:'Африканские черты', asian:'Азиатские черты', caucasian:'Европейские черты'
 };
 
+const SKIN_LABELS = { porcelain:'Фарфоровый', fair:'Светлый', light:'Светло-бежевый', beige:'Бежевый', warm:'Тёплый', olive:'Оливковый', tan:'Загорелый', caramel:'Карамельный', chestnut:'Каштановый', mocha:'Мокко', brown:'Коричневый', deep:'Тёмный', ebony:'Очень тёмный' };
 const EYES = {
   brown:'Тёмно-карие', brownlight:'Карие', green:'Зелёные', blue:'Голубые',
   deepblue:'Тёмно-голубые', lightblue:'Светло-голубые', bluegreen:'Серо-зелёные', grey:'Серые', ice:'Ледяные'
@@ -198,7 +199,7 @@ function initAdvancedUI({ editorModel, packageData, getConfig, applyConfig }) {
     button.dataset.skin = option.id;
     button.style.setProperty('--swatch', option.swatch || '#bd9678');
     button.setAttribute('aria-label', option.label || option.id);
-    button.title = option.label || option.id;
+    button.title = SKIN_LABELS[option.id] || option.label || option.id;
     button.addEventListener('click', () => {
       const latest = getConfig();
       applyConfig(controls.skin.apply(latest, option.id), 'ИЗМЕНЕНИЕ ТОНА КОЖИ');
@@ -269,7 +270,7 @@ function initAdvancedUI({ editorModel, packageData, getConfig, applyConfig }) {
     faceSelect.value = shapeName;
 
     for (const button of skinRoot.querySelectorAll('button')) {
-      button.classList.toggle('selected', button.dataset.skin === config.skin);
+      button.classList.toggle('selected', button.dataset.skin === controls.skin?.value(config));
     }
     for (const button of hairColors.querySelectorAll('button')) {
       button.classList.toggle('selected', button.dataset.color.toLowerCase() === (config.hairColor || '').toLowerCase());
