@@ -172,6 +172,7 @@ function updateControlsFromConfig() {
   $('shoes').value = shoe;
   document.querySelectorAll('#skinSwatches button').forEach((b) => b.classList.toggle('selected', b.dataset.skin === currentConfig.skin));
   document.querySelectorAll('#hairSwatches button').forEach((b) => b.classList.toggle('selected', b.dataset.color.toLowerCase() === (currentConfig.hairColor || '').toLowerCase()));
+  window.dispatchEvent(new CustomEvent('character-studio-config-changed', { detail: { config: currentConfig } }));
 }
 
 function syncBodyControls() {
@@ -301,7 +302,7 @@ async function start() {
     setLoading('Скачиваем базовую сетку, скелет и карты кожи…');
     renderStatus.textContent = 'ЗАГРУЗКА МОДЕЛИ';
     packageData = await loadHumanPackage(ASSET_ROOT);
-    editorModel = createHumanEditor(packageData, { gender: 'female', detailRange: 0.65 });
+    editorModel = createHumanEditor(packageData, { gender: 'female', detailRange: 0.65, featureSliders: true, optional: { hair: true, shoes: true, headwear: true, hat: true } });
     avatar = new HumanAvatar(packageData);
     avatar.textureSize = '2k';
     avatar.anisotropy = 4;
@@ -324,6 +325,9 @@ async function start() {
       }
     });
     updateControlsFromConfig();
+    window.dispatchEvent(new CustomEvent('character-studio-ready', {
+      detail: { editorModel, packageData, getConfig: () => currentConfig, applyConfig }
+    }));
     controls.target.set(0, 0.91, 0);
     controls.update();
     setLoading('', false);
