@@ -66,7 +66,11 @@ const FACE_PRESETS = {
   petite: { headOval:0.42, headRound:0.1, headSquare:0, headHeart:0.12, headWidth:-0.22, headHeight:0.12, chinWidth:-0.2 }
 };
 const FACE_SHAPE_IDS = ['headOval','headRound','headSquare','headHeart'];
-const BODY_DETAIL_IDS = ['neckWidth','neckLength','shoulders','chest','waist','hips','vShape','belly'];
+const BODY_GROUPS = [
+  { label:'Шея, плечи и грудная клетка', ids:['neckWidth','neckLength','shoulders','chest','vShape'] },
+  { label:'Живот и талия', ids:['belly','waist'] },
+  { label:'Бёдра', ids:['hips'] }
+];
 
 function findControl(editor, sectionId, controlId) {
   const section = editor.sections.find((item) => item.id === sectionId);
@@ -139,14 +143,20 @@ function initAdvancedUI({ editorModel, packageData, getConfig, applyConfig }) {
 
   const bodySection = allControls.find((item) => item.id === 'body');
   if (bodySection) {
-    const details = document.createElement('div');
-    details.className = 'nested-editor-content';
-    for (const control of bodySection.controls) {
-      if (control.kind === 'slider' && BODY_DETAIL_IDS.includes(control.id)) {
-        details.appendChild(makeSlider(control, getConfig(), applyConfig, 'body'));
-      }
+    const bodyControls = new Map(bodySection.controls.filter((item) => item.kind === 'slider').map((item) => [item.id, item]));
+    for (const group of BODY_GROUPS) {
+      const available = group.ids.map((id) => bodyControls.get(id)).filter(Boolean);
+      if (!available.length) continue;
+      const details = document.createElement('details');
+      details.className = 'nested-editor-group';
+      const summary = document.createElement('summary');
+      summary.textContent = group.label;
+      const content = document.createElement('div');
+      content.className = 'nested-editor-content';
+      for (const control of available) content.appendChild(makeSlider(control, getConfig(), applyConfig, 'body'));
+      details.append(summary, content);
+      bodyRoot.appendChild(details);
     }
-    bodyRoot.appendChild(details);
   }
 
   const faceSelect = $('faceShape');
@@ -221,11 +231,25 @@ function initAdvancedUI({ editorModel, packageData, getConfig, applyConfig }) {
     hairColors.appendChild(button);
   }
 
+  let savedWardrobe = null;
+  let anatomyMode = false;
+  const anatomyButton = $('baseOutfitBtn');
+  const restoreButton = $('restoreWardrobeBtn');
+  const syncWardrobeButtons = () => {
+    anatomyButton.classList.toggle('active', anatomyMode);
+    anatomyButton.setAttribute('aria-pressed', String(anatomyMode));
+    anatomyButton.textContent = anatomyMode ? 'Анатомический слой включён' : 'Анатомический предпросмотр';
+    restoreButton.disabled = !savedWardrobe;
+  };
+
   const applySlot = (slot, value) => {
     const control = controls[slot];
     if (!control) return;
     const latest = getConfig();
-    applyConfig(control.apply(latest, value === '' ? null : value), 'ИЗМЕНЕНИЕ ОДЕЖДЫ');
+    const next = control.apply(latest, value === '' ? null : value);
+    if (anatomyMode && ['outfit','shoes','headwear','hat'].includes(slot)) anatomyMode = false;
+    applyConfig(next, 'ИЗМЕНЕНИЕ ОДЕЖДЫ');
+    syncWardrobeButtons();
   };
   // Capture phase prevents the original minimal demo handlers from replacing other worn items.
   for (const [id, slot] of [['hairStyle','hair'],['eyes','eyes'],['outfit','outfit'],['shoes','shoes'],['headwear','headwear'],['hat','hat']]) {
@@ -238,7 +262,34 @@ function initAdvancedUI({ editorModel, packageData, getConfig, applyConfig }) {
     }, true);
   }
 
-  $('baseOutfitBtn').addEventListener('click', () => applySlot('outfit', 'female_sportsuit01'));
+  anatomyButton.addEventListener('click', async () => {
+    if (anatomyMode) return;
+    const current = getConfig();
+    savedWardrobe = {
+      clothes: [...(current.clothes || [])],
+      garmentColors: current.garmentColors ? { ...current.garmentColors } : null
+    };
+    let base = controls.outfit.apply(current, 'female_sportsuit01');
+    base = controls.shoes.apply(base, null);
+    base = controls.headwear.apply(base, null);
+    base = controls.hat.apply(base, null);
+    anatomyMode = true;
+    const patch = { clothes: base.clothes };
+    if (base.garmentColors) patch.garmentColors = base.garmentColors;
+    await applyConfig(patch, 'АНАТОМИЧЕСКИЙ ПРЕДПРОСМОТР');
+    syncWardrobeButtons();
+  });
+
+  restoreButton.addEventListener('click', async () => {
+    if (!savedWardrobe) return;
+    const patch = { clothes: [...savedWardrobe.clothes] };
+    if (savedWardrobe.garmentColors) patch.garmentColors = { ...savedWardrobe.garmentColors };
+    anatomyMode = false;
+    await applyConfig(patch, 'ВОЗВРАТ ПРЕЖНЕЙ ОДЕЖДЫ');
+    savedWardrobe = null;
+    syncWardrobeButtons();
+  });
+
   $('removeAccessoriesBtn').addEventListener('click', () => {
     const accessories = new Set([
       ...editorModel.allowed.shoes, ...editorModel.allowed.headwear, ...editorModel.allowed.hat
@@ -246,6 +297,7 @@ function initAdvancedUI({ editorModel, packageData, getConfig, applyConfig }) {
     const clothes = getConfig().clothes.filter((id) => !accessories.has(id));
     applyConfig({ clothes }, 'СНЯТИЕ АКСЕССУАРОВ');
   });
+  syncWardrobeButtons();
 
   const refresh = (config = getConfig()) => {
     for (const input of document.querySelectorAll('[data-advanced-section][data-advanced-control]')) {
