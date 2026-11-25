@@ -1,36 +1,185 @@
 <!doctype html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<meta name="theme-color" content="#100b12">
-<title>AI Character Studio</title>
-<link rel="stylesheet" href="./styles.css">
-<script type="importmap">
-{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js"}}
-</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="theme-color" content="#100b12">
+  <title>Character Studio — Realistic 3D</title>
 </head>
 <body>
-<div class="app-shell">
-<header class="topbar"><div class="brand"><span class="brand-mark">✦</span><div><strong>CHARACTER STUDIO</strong><small>3D CREATOR · PREVIEW BUILD</small></div></div><div class="top-actions"><span class="pill" id="stylePill">REALISTIC</span><button class="icon-btn" id="saveBtn" title="Save snapshot">▣</button></div></header>
-<div class="workspace">
-<aside class="sidebar">
-<div class="panel-heading">CHARACTER</div>
-<div class="mode-switch"><button class="active" data-mode="realistic">Realistic</button><button data-mode="anime">Anime</button></div>
-<label class="field-label">Preset</label><select id="preset"><option value="default">Studio model</option><option value="fantasy">Fantasy adventurer</option><option value="cyber">Cyberpunk</option><option value="casual">Casual outfit</option></select>
-<div class="section-title">Appearance</div>
-<label class="slider-row"><span>Body build</span><output id="buildOut">50</output><input id="build" type="range" min="25" max="85" value="50"></label>
-<label class="slider-row"><span>Height</span><output id="heightOut">50</output><input id="height" type="range" min="35" max="75" value="50"></label>
-<label class="slider-row"><span>Hair length</span><output id="hairOut">70</output><input id="hair" type="range" min="0" max="100" value="70"></label>
-<label class="field-label">Skin tone</label><div class="swatches" id="skinSwatches"><button data-color="#f2c6a8" class="selected"></button><button data-color="#d69a75"></button><button data-color="#a96c4d"></button><button data-color="#704832"></button><button data-color="#f0d7c8"></button></div>
-<label class="field-label">Hair color</label><div class="swatches" id="hairSwatches"><button data-color="#23151c" class="selected"></button><button data-color="#8e4d2b"></button><button data-color="#d8bd86"></button><button data-color="#b8c6d7"></button><button data-color="#c84b66"></button></div>
-<div class="section-title">Wardrobe</div><select id="outfit"><option value="black">Black studio outfit</option><option value="white">White outfit</option><option value="red">Crimson outfit</option><option value="fantasy">Fantasy armor</option></select>
-<div class="section-title">Scene</div><select id="background"><option value="studio">Soft studio</option><option value="sunset">Sunset</option><option value="night">Night city</option><option value="forest">Forest</option></select>
-<div class="section-title">Lighting</div><label class="slider-row"><span>Light intensity</span><output id="lightOut">75</output><input id="light" type="range" min="20" max="120" value="75"></label>
-<button class="primary-btn" id="randomBtn">✦ Randomize character</button>
-</aside>
-<main class="viewport-wrap"><div class="viewport" id="viewport"><div class="viewport-label"><span>LIVE 3D VIEW</span><span>DRAG TO ORBIT · PINCH TO ZOOM</span></div><div id="stage"></div><div class="loading" id="loading">Loading 3D studio…</div><div class="view-tools"><button id="resetView">↺ Reset view</button><button id="fullscreen">⛶</button></div></div><div class="bottom-panel"><div><strong id="characterName">Astra · Character 01</strong><small>Preview model · customize using controls</small></div><div class="bottom-actions"><button id="poseBtn">Pose: Neutral</button><button class="primary-btn" id="captureBtn">Capture</button></div></div><section class="gallery"><div class="gallery-head"><strong>Snapshots</strong><span id="galleryCount">0 images</span></div><div class="gallery-grid" id="galleryGrid"><div class="empty-gallery">Snapshots you capture will appear here.</div></div></section></main>
-</div>
-</div>
-<script type="module" src="./app.js"></script>
-</body></html>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark">✦</span>
+        <div>
+          <strong>CHARACTER STUDIO</strong>
+          <small>РЕАЛИСТИЧНЫЙ 3D-КОНСТРУКТОР</small>
+        </div>
+      </div>
+      <div class="top-actions">
+        <span class="quality-pill"><span class="live-dot"></span> PBR · 2K</span>
+        <button class="icon-btn" id="saveBtn" title="Сохранить снимок" aria-label="Сохранить снимок">▣</button>
+      </div>
+    </header>
+
+    <main class="workspace">
+      <aside class="sidebar">
+        <div class="sidebar-heading">
+          <div class="eyebrow">ПЕРСОНАЖ</div>
+          <h1>Внешность</h1>
+          <p>Настрой модель и рассмотри её со всех сторон</p>
+        </div>
+
+        <label class="field-label" for="preset">Стартовый образ</label>
+        <select id="preset">
+          <option value="reference">Повседневный · референс</option>
+          <option value="sport">Спортивный</option>
+          <option value="casual">Городской</option>
+          <option value="elegant">Элегантный</option>
+        </select>
+
+        <section class="control-section">
+          <div class="section-title"><span class="section-icon">◉</span> Телосложение</div>
+          <label class="slider-row">
+            <span>Возраст</span><output id="ageOut">30</output>
+            <input id="age" type="range" min="18" max="55" value="30">
+          </label>
+          <label class="slider-row">
+            <span>Телосложение</span><output id="buildOut">52</output>
+            <input id="build" type="range" min="20" max="80" value="52">
+          </label>
+          <label class="slider-row">
+            <span>Рост</span><output id="heightOut">50</output>
+            <input id="height" type="range" min="25" max="75" value="50">
+          </label>
+          <label class="slider-row">
+            <span>Мышечный тонус</span><output id="muscleOut">36</output>
+            <input id="muscle" type="range" min="10" max="85" value="36">
+          </label>
+        </section>
+
+        <section class="control-section">
+          <div class="section-title"><span class="section-icon">◌</span> Кожа и глаза</div>
+          <label class="field-label">Тон кожи</label>
+          <div class="swatches" id="skinSwatches">
+            <button class="skin-swatch selected" data-skin="young_caucasian_female" style="--swatch:#e8bea2" aria-label="Светлый тон"></button>
+            <button class="skin-swatch" data-skin="young_asian_female" style="--swatch:#dcae88" aria-label="Тёплый тон"></button>
+            <button class="skin-swatch" data-skin="young_african_female" style="--swatch:#966247" aria-label="Тёмный тон"></button>
+          </div>
+          <label class="field-label" for="eyes">Цвет глаз</label>
+          <select id="eyes">
+            <option value="brownlight">Карие</option>
+            <option value="brown">Тёмно-карие</option>
+            <option value="green">Зелёные</option>
+            <option value="blue">Голубые</option>
+            <option value="grey">Серые</option>
+          </select>
+        </section>
+
+        <section class="control-section">
+          <div class="section-title"><span class="section-icon">⌁</span> Волосы</div>
+          <label class="field-label" for="hairStyle">Причёска</label>
+          <select id="hairStyle">
+            <option value="ponytail01">Высокий хвост</option>
+            <option value="long01">Длинные волосы</option>
+            <option value="braid01">Коса</option>
+            <option value="bob02">Каре</option>
+            <option value="bob01">Уложенное каре</option>
+            <option value="rehmanpolanski_hair_bun_brown">Пучок</option>
+          </select>
+          <label class="field-label">Цвет волос</label>
+          <div class="swatches" id="hairSwatches">
+            <button class="color-swatch selected" data-color="#38251c" style="--swatch:#38251c" aria-label="Тёмно-каштановый"></button>
+            <button class="color-swatch" data-color="#6b4428" style="--swatch:#6b4428" aria-label="Каштановый"></button>
+            <button class="color-swatch" data-color="#a4774b" style="--swatch:#a4774b" aria-label="Русый"></button>
+            <button class="color-swatch" data-color="#d2b078" style="--swatch:#d2b078" aria-label="Блонд"></button>
+            <button class="color-swatch" data-color="#211b22" style="--swatch:#211b22" aria-label="Чёрный"></button>
+          </div>
+        </section>
+
+        <section class="control-section">
+          <div class="section-title"><span class="section-icon">◇</span> Одежда</div>
+          <label class="field-label" for="outfit">Комплект</label>
+          <select id="outfit">
+            <option value="female_sportsuit01">Спортивный комплект</option>
+            <option value="female_casualsuit02">Повседневная одежда</option>
+            <option value="female_casualsuit01">Футболка и брюки</option>
+            <option value="female_elegantsuit01">Элегантный костюм</option>
+          </select>
+          <label class="field-label" for="shoes">Обувь</label>
+          <select id="shoes">
+            <option value="shoes02">Повседневная</option>
+            <option value="shoes01">Классическая</option>
+            <option value="shoes03">Спортивная</option>
+            <option value="shoes04">Ботинки</option>
+            <option value="shoes05">Обувь 5</option>
+          </select>
+        </section>
+
+        <section class="control-section">
+          <div class="section-title"><span class="section-icon">✧</span> Студия</div>
+          <label class="field-label" for="background">Фон</label>
+          <select id="background">
+            <option value="studio">Студийный</option>
+            <option value="warm">Тёплый</option>
+            <option value="night">Тёмный</option>
+            <option value="neutral">Серый</option>
+          </select>
+          <label class="slider-row">
+            <span>Освещение</span><output id="lightOut">75</output>
+            <input id="light" type="range" min="20" max="120" value="75">
+          </label>
+          <label class="field-label" for="quality">Качество текстур</label>
+          <select id="quality">
+            <option value="2k">Высокое · 2K</option>
+            <option value="1k">Сбалансированное · 1K</option>
+            <option value="512">Быстрое · 512</option>
+          </select>
+        </section>
+
+        <div class="sidebar-actions">
+          <button class="primary-btn" id="randomBtn">✦ Случайный образ</button>
+          <button class="secondary-btn" id="resetBtn">Сбросить настройки</button>
+        </div>
+        <p class="asset-note">Реалистичная анатомическая 3D-модель, текстуры кожи, волосы и материалы одежды. Для загрузки деталей модели нужен интернет.</p>
+      </aside>
+
+      <section class="viewport-wrap">
+        <div class="viewport" id="viewport">
+          <div class="viewport-label">
+            <span><i></i> 3D-ПРЕДПРОСМОТР</span>
+            <span>ВРАЩАЙ · ПРИБЛИЖАЙ · ОСМАТРИВАЙ</span>
+          </div>
+          <div id="stage"></div>
+          <div class="loading" id="loading">
+            <div class="loading-mark">✦</div>
+            <strong>Загружаем реалистичную модель</strong>
+            <span id="loadingText">Подготавливаем анатомию и текстуры…</span>
+          </div>
+          <div class="view-tools">
+            <button id="resetView">↺ Сбросить ракурс</button>
+            <button id="fullscreen" aria-label="Полный экран">⛶</button>
+          </div>
+          <div class="render-status"><span class="live-dot"></span><span id="renderStatus">ОЖИДАНИЕ МОДЕЛИ</span></div>
+        </div>
+
+        <div class="bottom-panel">
+          <div class="character-meta">
+            <strong>Персонаж 01</strong>
+            <small>Полноразмерная 3D-модель · PBR-материалы · скелет</small>
+          </div>
+          <div class="bottom-actions">
+            <button class="primary-btn capture-btn" id="captureBtn">Сохранить снимок</button>
+          </div>
+        </div>
+
+        <section class="gallery">
+          <div class="gallery-head"><strong>Снимки персонажа</strong><span id="galleryCount">0 изображений</span></div>
+          <div class="gallery-grid" id="galleryGrid"><div class="empty-gallery">Сохранённые изображения появятся здесь.</div></div>
+        </section>
+      </section>
+    </main>
+  </div>
+  <script type="module" src="/app.js"></script>
+</body>
+</html>
