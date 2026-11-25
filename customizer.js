@@ -238,7 +238,7 @@ function initAdvancedUI({ editorModel, packageData, getConfig, applyConfig }) {
   const syncWardrobeButtons = () => {
     anatomyButton.classList.toggle('active', anatomyMode);
     anatomyButton.setAttribute('aria-pressed', String(anatomyMode));
-    anatomyButton.textContent = anatomyMode ? 'Анатомический слой включён' : 'Анатомический предпросмотр';
+    anatomyButton.textContent = anatomyMode ? 'Базовый комплект включён' : 'Базовый комплект';
     restoreButton.disabled = !savedWardrobe;
   };
 
@@ -276,7 +276,7 @@ function initAdvancedUI({ editorModel, packageData, getConfig, applyConfig }) {
     anatomyMode = true;
     const patch = { clothes: base.clothes };
     if (base.garmentColors) patch.garmentColors = base.garmentColors;
-    await applyConfig(patch, 'АНАТОМИЧЕСКИЙ ПРЕДПРОСМОТР');
+    await applyConfig(patch, 'БАЗОВЫЙ КОМПЛЕКТ');
     syncWardrobeButtons();
   });
 
