@@ -6,16 +6,14 @@ android {
         applicationId 'com.characterstudio.app'
         minSdk 23
         targetSdk 35
-        versionCode 1
-        versionName '1.0'
+        versionCode 2
+        versionName '1.1'
     }
 }
 
-def webRoot = rootProject.projectDir.parentFile
-tasks.register('copyWebAssets', Copy) {
-    from(webRoot) {
-        include 'index.html', 'styles.css', 'app.js'
-    }
+def webDist = rootProject.projectDir.parentFile.toPath().resolve('web-dist').toFile()
+tasks.register('copyWebAssets', Sync) {
+    from(webDist)
     into(file('src/main/assets/www'))
 }
 tasks.named('preBuild').configure {
