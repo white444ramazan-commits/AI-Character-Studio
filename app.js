@@ -18,17 +18,19 @@ let shots = 0;
 let busy = false;
 
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true, powerPreference: 'high-performance' });
-renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.7));
+renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2.0));
 renderer.setSize(stage.clientWidth || 800, stage.clientHeight || 600);
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.08;
+renderer.toneMappingExposure = 1.02;
+renderer.info.autoReset = true;
 stage.appendChild(renderer.domElement);
 
 const scene = new THREE.Scene();
-scene.background = new THREE.Color('#211b24');
+scene.background = new THREE.Color('#26262d');
+scene.environmentIntensity = 1.12;
 const camera = new THREE.PerspectiveCamera(29, Math.max(1, stage.clientWidth) / Math.max(1, stage.clientHeight), 0.05, 80);
 camera.position.set(2.25, 1.48, 3.05);
 
@@ -102,7 +104,7 @@ const DEFAULT_CONFIG = {
   eyelashes: 'eyelashes02',
   hair: 'ponytail01',
   hairColor: '#38251c',
-  clothes: ['female_sportsuit01', 'shoes02']
+  clothes: ['female_sportsuit01']
 };
 
 const PRESETS = {
@@ -209,6 +211,13 @@ function initControls() {
     const preset = PRESETS[e.target.value] || PRESETS.reference;
     await applyConfig(preset, 'ЗАГРУЗКА ОБРАЗА');
   });
+  document.querySelectorAll('.quick-nav-btn').forEach((button) => {
+    button.addEventListener('click', () => {
+      document.querySelectorAll('.quick-nav-btn').forEach((item) => item.classList.remove('active'));
+      button.classList.add('active');
+      document.querySelector(button.dataset.scroll)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
   $('light').addEventListener('input', (e) => {
     const value = +e.target.value / 75;
     keyLight.intensity = 3.1 * value;
@@ -230,6 +239,9 @@ function initControls() {
   $('quality').addEventListener('change', async (e) => {
     if (!avatar) return;
     avatar.textureSize = e.target.value;
+    const pixelRatio = e.target.value === '2k' ? 2.0 : e.target.value === '1k' ? 1.6 : 1.15;
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, pixelRatio));
+    renderer.setSize(stage.clientWidth || 800, stage.clientHeight || 600);
     setLoading('Перезагружаем текстуры выбранного качества…');
     try {
       await avatar.reloadTextures();
@@ -305,7 +317,7 @@ async function start() {
     editorModel = createHumanEditor(packageData, { gender: 'female', detailRange: 0.65, featureSliders: true, optional: { hair: true, shoes: true, headwear: true, hat: true } });
     avatar = new HumanAvatar(packageData);
     avatar.textureSize = '2k';
-    avatar.anisotropy = 4;
+    avatar.anisotropy = 8;
     avatar.normalMaps = true;
     avatar.group.position.y = 0;
     scene.add(avatar.group);
@@ -313,15 +325,24 @@ async function start() {
     currentConfig = { ...DEFAULT_CONFIG, detail: {} };
     await avatar.setConfig(currentConfig);
     avatar.group.traverse((object) => {
-      if (object.isMesh) {
-        object.castShadow = true;
-        object.receiveShadow = true;
-        if (object.material && !Array.isArray(object.material)) {
-          object.material.shadowSide = THREE.FrontSide;
-          if (object.material.roughness !== undefined && object.name !== 'body') {
-            object.material.roughness = Math.max(0.42, object.material.roughness);
-          }
+      if (!object.isMesh) return;
+      object.castShadow = true;
+      object.receiveShadow = true;
+      const materials = Array.isArray(object.material) ? object.material : [object.material];
+      for (const material of materials) {
+        if (!material) continue;
+        material.shadowSide = THREE.FrontSide;
+        const materialName = (material.name || '').toLowerCase();
+        const objectName = (object.name || '').toLowerCase();
+        const isSkin = /body|skin|face/.test(materialName + ' ' + objectName);
+        if (isSkin) {
+          if (material.roughness !== undefined) material.roughness = Math.max(0.68, material.roughness);
+          if (material.metalness !== undefined) material.metalness = 0;
+          if (material.envMapIntensity !== undefined) material.envMapIntensity = 0.92;
+        } else if (material.roughness !== undefined && !/hair|eye|iris/.test(materialName + ' ' + objectName)) {
+          material.roughness = Math.max(0.5, material.roughness);
         }
+        material.needsUpdate = true;
       }
     });
     updateControlsFromConfig();
@@ -332,6 +353,7 @@ async function start() {
     controls.update();
     setLoading('', false);
     renderStatus.textContent = 'МОДЕЛЬ ГОТОВА · PBR';
+    $('quality').value = '2k';
   } catch (error) {
     console.error('Could not load HumanForge model:', error);
     setLoading('Не удалось загрузить модель. Проверь интернет и повторно открой приложение.');
