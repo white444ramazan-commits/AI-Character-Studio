@@ -54,3 +54,99 @@
   border-color:#735061;
   color:#f1dce6;
 }
+
+/* Clearer tablet-first studio layout */
+:root{
+  --bg:#eef0f3;--panel:#ffffff;--panel2:#f5f5f8;--line:#e2dfe6;
+  --text:#27232b;--muted:#746d79;--accent:#d94b72;--accent2:#a72d54;
+}
+body{background:#eef0f3;color:var(--text)}
+.app-shell{background:#eef0f3}
+.topbar{
+  height:64px;padding:0 20px;background:#fff;border-bottom:1px solid #e6e2e9;
+  box-shadow:0 2px 12px #29202c0a;
+}
+.brand strong{color:#29232d;font-size:12px;letter-spacing:1.3px}
+.brand small{color:#867b88}
+.brand-mark{box-shadow:0 5px 16px #c13c6420}
+.quality-pill{background:#faf6f8;color:#9e3859;border-color:#efd9e2}
+.icon-btn{background:#fff;color:#7f5264;border-color:#e9dce3}
+.workspace{grid-template-columns:330px minmax(0,1fr)}
+.sidebar{
+  background:#fbfbfc;border-right:1px solid #e1dde5;padding:18px 16px 22px;
+  scrollbar-color:#d8cbd3 transparent;
+}
+.sidebar-heading{margin:0 0 12px}
+.eyebrow{color:#b44468;font-size:9px;letter-spacing:1.5px}
+.sidebar h1{font-size:21px;color:#29232d;margin:7px 0 5px}
+.sidebar-heading p{font-size:11px;color:#756c79;line-height:1.55}
+.quick-nav{
+  position:sticky;top:-18px;z-index:4;display:flex;gap:5px;overflow-x:auto;
+  padding:9px 0 11px;margin:0 0 10px;background:#fbfbfc;
+  scrollbar-width:none;border-bottom:1px solid #eeeaf0;
+}
+.quick-nav::-webkit-scrollbar{display:none}
+.quick-nav-btn{
+  flex:none;min-height:34px;padding:0 11px;border:1px solid #e5dfe7;border-radius:9px;
+  background:#f4f2f6;color:#655b69;font-size:10px;font-weight:700;
+}
+.quick-nav-btn.active{background:#fbeaf0;color:#a73559;border-color:#efc5d4}
+.field-label{color:#5f5664;font-size:10px;margin:12px 0 6px}
+select{
+  height:39px;padding:0 12px;background:#fff;color:#28232b;border-color:#ded8e2;
+  border-radius:10px;font-size:11px;box-shadow:0 1px 2px #20172508;
+}
+select:focus{border-color:#d35c7e;box-shadow:0 0 0 3px #e95b7e18}
+.control-section{border-top:1px solid #ece8ef;margin-top:15px;padding-top:13px}
+.section-title{color:#332c37;font-size:11px;margin-bottom:12px}
+.section-icon{background:#faeaf0;color:#ba3d65}
+.slider-row{color:#655d69;font-size:10px;margin:11px 0}
+.slider-row output{color:#b23f65;font-weight:700}
+.slider-row input{accent-color:#d94b72}
+.swatches{gap:10px}
+.swatches button{width:26px;height:26px;border:2px solid #ded8e0;box-shadow:inset 0 0 0 1px #ffffff35}
+.swatches button.selected{outline:2px solid #d94b72;outline-offset:2px}
+.primary-btn{
+  background:linear-gradient(120deg,#e4577e,#bd3c65);border-radius:10px;
+  box-shadow:0 5px 14px #c23c6520;font-size:11px;min-height:40px;
+}
+.secondary-btn{border-color:#e1d7df;background:#f8f5f8;color:#655462;border-radius:10px;min-height:38px;font-size:10px}
+.asset-note,.inline-note{color:#7c727f;font-size:9px;line-height:1.6}
+.advanced-section{scroll-margin-top:12px}
+.control-section[id],#preset{scroll-margin-top:60px}
+.viewport-wrap{padding:14px 16px 14px;background:#eef0f3}
+.viewport{
+  border:1px solid #cfc9d4;border-radius:18px;
+  background:radial-gradient(ellipse at 50% 34%,#51515a 0,#303039 48%,#202027 100%);
+  box-shadow:inset 0 0 55px #09091070,0 12px 30px #31293612;
+}
+.viewport-label{color:#f1edf2;font-size:9px;letter-spacing:1px}
+.view-tools button{
+  border:1px solid #ffffff36;border-radius:10px;background:#26232ccc;
+  color:#fff;padding:10px 13px;font-size:10px;
+}
+.render-status{color:#f2eaf0;font-size:9px}
+.bottom-panel,.gallery{
+  border:1px solid #e1dce5;border-radius:13px;background:#fff;
+  box-shadow:0 3px 12px #26202c08;
+}
+.character-meta strong{color:#302a34;font-size:11px}
+.character-meta small{color:#7a717e;font-size:9px;line-height:1.4}
+.gallery-head strong{color:#342d38}
+.gallery-head span{color:#827984}
+.thumb{border-color:#e5dfe7;background:#f8f7f9}
+.thumb span{color:#77717c}
+.loading{background:#26212bdc;color:#fff;backdrop-filter:blur(9px)}
+.loading span{color:#d6cbd7}
+@media(max-width:850px){
+  .workspace{grid-template-columns:305px minmax(0,1fr)}
+  .sidebar{padding:14px 12px}
+  .viewport-wrap{padding:10px}
+}
+@media(max-width:620px){
+  .topbar{height:58px;padding:0 11px}
+  .workspace{display:flex;flex-direction:column}
+  .viewport-wrap{order:0;min-height:490px;height:60vh;padding:9px}
+  .sidebar{order:1;border-top:1px solid #e1dde5;max-height:none;overflow:visible}
+  .quick-nav{top:0}
+}
