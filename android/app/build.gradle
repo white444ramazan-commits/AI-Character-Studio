@@ -10,3 +10,14 @@ android {
         versionName '1.0'
     }
 }
+
+def webRoot = rootProject.projectDir.parentFile
+tasks.register('copyWebAssets', Copy) {
+    from(webRoot) {
+        include 'index.html', 'styles.css', 'app.js'
+    }
+    into(file('src/main/assets/www'))
+}
+tasks.named('preBuild').configure {
+    dependsOn('copyWebAssets')
+}
