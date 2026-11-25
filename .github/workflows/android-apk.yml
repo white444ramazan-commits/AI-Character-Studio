@@ -7,7 +7,7 @@ on:
       - '.github/workflows/android-apk.yml'
   workflow_dispatch:
 permissions:
-  contents: read
+  contents: write
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -23,9 +23,27 @@ jobs:
       - name: Build APK
         working-directory: android
         run: gradle assembleDebug
-      - name: Upload APK
+      - name: Verify APK
+        run: test -s android/app/build/outputs/apk/debug/app-debug.apk
+      - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
           name: Character-Studio-APK
           path: android/app/build/outputs/apk/debug/app-debug.apk
           retention-days: 30
+      - name: Prepare direct-download file
+        run: cp android/app/build/outputs/apk/debug/app-debug.apk Character-Studio.apk
+      - name: Publish direct APK download
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view character-studio-latest --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            gh release upload character-studio-latest Character-Studio.apk --clobber --repo "$GITHUB_REPOSITORY"
+          else
+            gh release create character-studio-latest Character-Studio.apk \
+              --title "Character Studio APK" \
+              --notes "Latest Android APK build. Download Character-Studio.apk to install." \
+              --prerelease \
+              --target "$GITHUB_SHA" \
+              --repo "$GITHUB_REPOSITORY"
+          fi
