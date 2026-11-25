@@ -154,10 +154,11 @@
           <label class="field-label" for="hat">Шляпа / шапка</label>
           <select id="hat"><option value="">Без шляпы</option></select>
           <div class="wardrobe-actions">
-            <button class="secondary-btn" id="baseOutfitBtn">Базовый закрытый комплект</button>
+            <button class="secondary-btn anatomy-mode-btn" id="baseOutfitBtn" aria-pressed="false">Анатомический предпросмотр</button>
+            <button class="secondary-btn" id="restoreWardrobeBtn" disabled>Вернуть прежнюю одежду</button>
             <button class="secondary-btn" id="removeAccessoriesBtn">Снять аксессуары</button>
           </div>
-          <p class="inline-note">Доступны закрытые комплекты, платья, обувь и головные уборы. Режим полной наготы не предусмотрен.</p>
+          <p class="inline-note">Анатомический предпросмотр использует закрытый непрозрачный базовый спортивный комплект. Он позволяет оценивать силуэт и пропорции без отображения интимных деталей.</p>
         </section>
 
         <section class="control-section">
