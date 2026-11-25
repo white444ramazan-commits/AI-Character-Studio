@@ -232,7 +232,7 @@ function initAdvancedUI({ editorModel, packageData, getConfig, applyConfig }) {
   }
 
   let savedWardrobe = null;
-  let anatomyMode = false;
+  let anatomyMode = true;
   const anatomyButton = $('baseOutfitBtn');
   const restoreButton = $('restoreWardrobeBtn');
   const syncWardrobeButtons = () => {
@@ -300,6 +300,11 @@ function initAdvancedUI({ editorModel, packageData, getConfig, applyConfig }) {
   syncWardrobeButtons();
 
   const refresh = (config = getConfig()) => {
+    const hasBaseLayer = (config.clothes || []).length === 1 && config.clothes[0] === 'female_sportsuit01';
+    if (anatomyMode && !hasBaseLayer) {
+      anatomyMode = false;
+      syncWardrobeButtons();
+    }
     for (const input of document.querySelectorAll('[data-advanced-section][data-advanced-control]')) {
       const sectionId = input.dataset.advancedSection;
       const control = findControl(editorModel, sectionId, input.dataset.advancedControl);
