@@ -297,7 +297,6 @@ function resize() {
 }
 
 async function start() {
-  initControls();
   try {
     setLoading('Скачиваем базовую сетку, скелет и карты кожи…');
     renderStatus.textContent = 'ЗАГРУЗКА МОДЕЛИ';
